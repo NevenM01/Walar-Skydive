@@ -1,0 +1,136 @@
+
+;;Polja koja treba unijeti;;;Žuta
+;;Izaberi s popisa;;;Svijetlozelena
+;;Formule - ne dirati!;;;Bijela, Pozadina 1, Tamnije 15%
+;;Ubaciti samo vrijednosti nakon izračuna;;;Zlatna, Isticanje 4, svjetlije 40%
+;;Ubaciti iz FAI baze;;;Plava, Isticanje 5, svjetlije 40%
+
+
+
+;Radni list;CompetitionsRanking;;No;Competition;Season;Unique Competition;Date of Competition start;Date of Competition end;Place;Conutry;FAI RANK;Bilten status;Finished jump rounds;M-Bilten;F-Bilten;JM-Bilten;JF-Bilten
+;;;UNIJETI:;;;;x
+;;;;Redni broj pojedinog natjecanja - ako ga ima (npr. 15.)
+;;;;;WCS Croatia;Izaberi s ponuđenog popisa (za proširivanje popisa idi na radni list Popisi i dodaj u A stupac na željeno mjesto tu stavku
+;;;;;;2024
+;;;;;;;automatski
+;;;;;;;;2025-05-20 00:00:00;Datum početka natjecanja
+;;;;;;;;;2025-05-23 00:00:00;Datum završetka natjecanja
+;;;;;;;;;;Poreč;Mjesto održavanja natjecanja
+;;;;;;;;;;;Hrvatska;Država održavanja natjecanja
+;;;;;;;;;;;;FAI Class 2.;Kategorija natjecanja po FAI-u
+;;;;;;;;;;;;;Processed;Ako je bilten unesen ili druga napomena ako nešto fali
+;;;;;;;;;;;;;;8;Broj izvršenih serija skokova
+;;;;;;;;;;;;;;;50;Broj muških sudionika (uključujuči i juniore)
+;;;;;;;;;;;;;;;;10;Broj ženskih sudionika (uključujuči i juniorke)
+;;;;;;;;;;;;;;;;;6;Broj muških juniora
+;;;;;;;;;;;;;;;;;;4;Broj ženskih juniora
+
+;Radni list;CompetitionsRanking;;CheckMFJ;M;F;JM;JF;ALL;ALL Juniors;Style M;Style F;Sum of WALAR rating points of the competitors;WALAR organizers points;Competition ranking;Team AL 1 place male;Team AL 2 place male;Team AL 3 place male;Chief Judge
+;;;UNIJETI:
+;;;;automatski;Provjeravaju se brojevi sudionika iz biltena i podaci u bazi (DA) ako se broj muških, ženskih i juniorskih kategorija podudaraju, (NE) ako se ne podudaraju!
+;;;;;automatski;automatski;automatski;automatski;automatski;automatski
+;;;;;;;;;;;20;Broj muških sudionika u figurama - informativno
+;;;;;;;;;;;;10;Broj ženskih sudionika u figurama - informativno
+;;;;;;;;;;;;;automatski;automatski;automatski
+;;;;;;;;;;;;;;;;Tim 1;Unijeti tim koji je bio na 1 mjesu
+;;;;;;;;;;;;;;;;;Tim 2;Unijeti tim koji je bio na 2 mjesu
+;;;;;;;;;;;;;;;;;;Tim 3;Unijeti tim koji je bio na 3 mjesu
+;;;;;;;;;;;;;;;;;;;Pero Perić;Unijeti ime glavnog suca
+
+
+
+;Radni list;FAIBaza;;;Ime i prezime;Country;FAI ID;NAC License No;Valid From;Valid To;Discipline;First Name;Last Name;Gender;Birth Date;Nationality;Residency;Email
+;;;UNIJETI:;;automatski
+;;;;;;Croatia;Unijeti državu iz koje dolaze sudionici
+;;;;;;;Uvesti podatke iz baze podataka od FAI-a
+
+
+
+;Radni list;Athletes;;;WALARID;Competitor;Gender;Nation;DoB;FAI ID Licence;FAI Valid to;GDPR;Airclub;Parachute 2024
+;;;;;;Pero Perić;"Ime i prezime natjecatelja - uskladiti ga sa poljem ""ime i prezime"" iz radnog lista FAIBaza; provjeriti na greške"
+;;;;;;;M;Spol
+;;;;;;;;Croatia;Država pod kojom nastupa natjecatelj (po kojoj je registiran u FAI-u)
+;;;;;;;;;1996-11-23 00:00:00;"Datum rođenja, provjeriti da li se poklapa s ""Birth Date"" iz radnog lista FAIBaza"
+;;;;;;;;;;automatski;Broj FAI dozvole, automatski se povlači iz FAIBaza-e ako postoji i ako je ime i prezime podjednako upisano
+;;;;;;;;;;;automatski;Datum valjanosti FAI dozvole (najveći datum koji je u bazi)
+;;;;;;;;;;;;YES;Podatak ako je natjecatelj dao GDPR dopuštenje
+;;;;;;;;;;;;;AK Cumulus;Matični klub (informativno)
+;;;;;;;;;;;;;;Classsic 281;Padobran koji koristi (informativno)
+
+;Radni list;Athletes;;;CISM WPC;2024 WPC;2023 World Cup;2022 WPC;2021 WPC;2019 World Cup;2018 WPC;2017 EPC;2016 WPC;2015 EPC;Comp.numb.
+;;;;;automatski - nakon izračuna copy-paste tako da se uklone formule i ostanu samo vrijednosti
+
+
+;;;;;WPC Medalist;Otpional name;ECUPID;Record;Note;Profile Photo;Total num of jumps;Licence rating;Mail;WhatsApp;Fb-profil;Poreč IPC 2024;Dodatak
+;;;;;2024-08-20 00:00:00;Unijeti datum ako je natjecatelj osvojio 1, 2 ili 3 mjesto na svjetskm prvenstvu ako mu je to prvi put, ako je već osvajao, unosi se datum kad je prvi put osvojio
+;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;;;;;Unijeti podatak ako je poznat
+;;;;;;;;;;;;;;;;;;Unijeti podatak ako je poznat
+
+
+;Radni list;WALARIN;;;Competition;Season;Date of Competition;Place;Conutry;FAI rank;WALAR CP;Competition Rang;WALAR index;Uniqe Competition
+;;;;;;Unijeti naziv natjecanja - mora se podudarati sa nazivom natjecanja iz radnog lista CompetitionsRanking
+;;;;;;;Sezona u kojoj se održava natjecanje
+;;;;;;;automatski;automatski;automatski;automatski;automatski;automatski;automatski;automatski
+
+
+;;;;;Team;Start number;Competitor;1. ;2.;3. ;4.;5. ;6. ;7.;8. ;SF;F;Total;TB
+;;;;;Tim 1;Unijeti ime tima
+;;;;;;11A;Unijeti startni broj
+;;;;;;;Marko Marić;Unijeti ime i prezime natjecatelja, mora se podudarati sa imenom na radnom listu Athletes
+;;;;;;;;Rezultati po skokovima 
+;;;;;;;;;;;;;;;;;;automatski
+;;;;;;;;;;;;;;;;;;;;Unijeti rezultate ako je bilo pripetavanja
+
+;;;;;Avg;Jump Rounds;Place M+F;Place M;Place F;Place J;Place MJ;Place FJ;Place Master
+;;;;;automatski
+;;;;;;automatski
+;;;;;;;8;Unijeti plasman u ukupnoj kategoriji
+;;;;;;;;5;Unijeti plasman u muškoj kategoriji
+;;;;;;;;;3;Unijeti plasman u ženskoj kategoriji
+;;;;;;;;;;4;Unijeti plasman u ukupnoj juniorskoj kategoriji
+;;;;;;;;;;;2;Unijeti plasman u muškoj juniorskoj kategoriji
+;;;;;;;;;;;;1;Unijeti plasman u ženskoj juniorskoj kategoriji
+;;;;;;;;;;;;;7;Unijeti plasman u master kategoriji
+
+
+
+;;;;;Gender;Age category;Personal jump num. (last);Nation;Airclub;DoB;Age;FAI ID Licence;FAI Licence Validation;Member of National Team;WPC medalist;Military
+
+;;;;;automatski - nakon izračuna copy-paste tako da se uklone formule i ostanu samo vrijednosti
+;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;5482;Unijeti ako postoji podatak (nebitno)
+;;;;;;;;automatski - nakon izračuna copy-paste tako da se uklone formule i ostanu samo vrijednosti
+;;;;;;;;;Cumulus;Unijeti ako postoji podatak (nebitno)
+;;;;;;;;;;automatski - nakon izračuna copy-paste tako da se uklone formule i ostanu samo vrijednosti
+;;;;;;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;;;;;;automatski - nakon izračuna copy-paste tako da se uklone formule i ostanu samo vrijednosti
+
+
+
+
+;;;;;WALAR rating;Rank points;Results points;WALAR score;CompetitorNat;ECUPID;WCS place;WCS points;CompetitorCopy;Uniqe Competition;Note
+
+;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;;;automatski;Autmatski se računa, no ne kopira se radi kasnije provjere u bazi
+;;;;;;;;;;;Razraditi provjeru po ECUPID-u
+;;;;;;;;;;;;Za prvih 30 mjesta kopirati plasmane, radi optimizacije izračuna poretka u Svjetkom kupu
+;;;;;;;;;;;;automatski
+;;;;;;;;;;;;;automatski
+;;;;;;;;;;;;;;automatski
+;;;;;;;;;;;;;;;;Ako još nešto treba dodati
+
+
+;Radni list;WALAR;;;Kopirati vrijednosti podataka iz radnog lista WALARIN osim onih koji se računaju na ovom radnom listu radi provjera

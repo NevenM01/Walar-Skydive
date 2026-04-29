@@ -1,0 +1,3 @@
+# Local R6 exports and normalizer outputs may contain personal data — do not commit.
+*
+!.gitignore

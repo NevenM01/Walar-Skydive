@@ -1,0 +1,32 @@
+
+Competitions Database;1;;Athletes Database;11;;111;Results Database;rezultati s pojedinog natjecanja;jedinstveni;;WALAR rating Database
+Competition Group;ParaWCS;;Competitor;Pero Perić;;1;Competitions Database;podaci o pojedinom natjecanju;jedinstven;;rang sportaša
+Competition Name;Bled ParaWCS;;sex;M / F;;11;Athletes Database;podaci o sportašima;više;;5;osvajač medalje na svjetskom, kontinentalnom
+No. Of competition;23.;;Nation;Austria;;;Team;Perin tim;;;3;član nac tima na svjetskom ili kontinentalnom
+Date of Competition start;2022-07-17 00:00:00;;DoB;1999-06-17 00:00:00;;;Start number;26B;;;2;natecatelj koji nije član nac tima a ima 250 bodova ili više temeljem rezultata (ne plasmana!)
+Date of Competition end;2022-07-19 00:00:00;;Age category;Junior;;;1. ;2;;;1;natjecatelj s prosjekom manjim od 10cm po skoku na predmentnom natjecanju
+Season;2022;;FAI ID Licence;123456;;;2. ;3;;;od prethodnog -1;natjecatelj koji na natjecanju ima prosjek iznad 10 cm po skoku
+Place;Lesce Bled;;Airclub;Aeroklub Cumulus;;;3. ;4;;;na prethodno +1;ako je junior
+Conutry;Slovenia;;Military (CISM);Yes/No;;;4. ;16
+Bilten status;Imamo / nemamo / fotka;;Record;ako ima neki rekord (svjetski, kontinentalni, nacionalni);;;5. ;3
+Chief Judge;Dare Svetina;;ECUPID;ID broj svjetskog kupa (radi lakše identifikacije sportaša u drugim bazama);;;6. ;8
+;;;Note;napomena ;;;7. ;1
+;;;Profile Photo;Fotografija sportaša;;;8. ;0
+M;broj sudionika;;Total num of jumps;1432;;;SF;5
+F;broj sudionika;;Licence rating;A/B/C/D instructor;;;F
+JM;broj sudionika;;;;;;TB;/
+JF;broj sudionika;;Age Category
+ALL;broj sudionika;;Today;2026-03-24 00:00:00;;;Total;42
+ALL Juniors;broj sudionika;;Junior age;24;;;Finished jump rounds;9
+Style M;broj sudionika;;Junior date;1998-12-31 00:00:00;;;Average score per jump;4.666666666666667
+Style F;broj sudionika;;Master age;50
+;;;Master date;;;;Place M+F;poredak u aposlutnoj kategoriji;;;Competitions ranking;World Championship;Continental Championship;World Cup / CISM WPC;PARA WCS;National Championship;WALAR A;WALAR B;WALAR C;WALAR D;WALAR E;WALAR F
+;;;;;;;Place M;poredak u muškoj kategoriji;;;Estimated minimum of competitors;80;60;70;80;5;60;50;40;30;20;11
+Sum of WALAR rating points of the competitors;WALAR rating Database;;WALAR rating Database;0 / 1 / 2 / 3 / 4 / 5 ;;;Place F;poredak u ženskoj kategoriji;;;Estimated sum of the rank points of the competitors;240;300;300;80;5;50;40;40;30;15;7
+;;;;;;;Place MJ;poredak u muškoj juniorskoj kategoriji;;;Estimated minimum of the jump rounds;8;7;7;6;5;6;5;5;5;5;7
+WALAR organizers points;broj sudionka x broj kokova x Sum of WALAR rating points of the competitors;;;;;;Place FJ;poredak u ženskoj juniorskoj kategoriji;;;WALAR OP (Organizer Points) CALCULATOR;153600;126000;147000;38400;125;18000;10000;8000;4500;1500;539
+;;;;;;;Place Master;poredak u M+Ž master kategoriji;;;WALAR OP Criteria;100000;50000;50000;20000;0;15000;10000;7500;4000;1500;500
+Competition ranking;"WALAR A / B / C / D / E / F ili WPC; EPC; WCS; Wcup / CISM"
+;;;Rank points;natjecatelj ih dobiva po plasmanu i Competition ranking tablici
+;;;Results points;natjecatelj ih dobiva po total rezultatu i broju skokova na natjecanju
+;;;WALAR score;zbroj prethodno dobivenih points-a

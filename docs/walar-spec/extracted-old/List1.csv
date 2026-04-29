@@ -1,0 +1,63 @@
+
+;Here it is! :)
+
+;This night I think something maybe easier for FreeFall style points, there is idea:
+
+;Points for the places can run as is defined.
+;Points for real result can be managed on this formula:
+
+;sum of the results, for example 
+;6,88 s
+;5,95 s
+;6,28 s
+;5,90 s
+;5,97 s
+;= 30,98 s in 5 jumps => average 6,20 s
+
+;6,20 s x 100 = 620 (or 6.200 milliseconds)
+
+;the worst average score is 16,00 s (16,00 s x 100 = 1.600 ( or 16.000 milliseconds) = 0 POINTS!
+
+;Points for the competitor are the difference between real score and worst score
+;"for example 1.600 - 620 = 980 POINTS!, but there is also factor about jump series;"
+;"if average result is from the one jump, factor is 1;"
+;two jumps, factor is 1,2
+;three jumps, factor is 1,3
+;four jumps, factor is 1,4
+;five jumps, factor is 1,5.
+
+;In total that mean, if the competitor makes more jumps (all competition or he reach semifinal or final) he will be awarded more:
+
+;in our example that means
+;6,88 s
+;5,95 s
+;6,28 s
+;5,90 s
+;5,97 s
+;= 30,98 s in 5 jumps => average 6,20 s
+;1.600 - 620 = 980 points   x factor 1,5 = 1.470 POINTS!
+
+;in the other example
+
+;8.61
+;8.37
+;7.8
+;= 24,78 s in 3 jumps => average 8,26 s
+;1.600 - 820 = 780 points x factor 1,3 = 1.014 POINTS!
+
+;in the next example
+
+;10,71 s
+;11,35 s
+;= 22,06 s in 2 jumps => average 11,03 s
+;1.600 - 1103 = 497 points x factor 1,2 = 596,4 POINTS!
+
+;In this way each 0,01 second of difference will be awarded and there will be easier to understand and calculate the points. Also that option maybe can more motivate competitors to join into style competitions in the future.
+
+;You can discuss with committee members about that option.
+;I can easily make a rank list according to this kind of rule.
+
+;Kind regards,
+;Goran
+
+;PS, you can modify header and footer in the excel when you switch here (my version is croatian, but will be on the similar position)

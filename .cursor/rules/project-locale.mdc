@@ -1,0 +1,23 @@
+---
+description: English for all project artifacts; Croatian for assistant replies
+alwaysApply: true
+---
+
+# Project language and assistant locale
+
+## Repository and system language (English)
+
+Use **English only** for everything that is part of the codebase or product:
+
+- Source code: identifiers, types, file names where convention allows
+- Comments, docstrings, and inline documentation
+- User-visible copy (UI labels, messages, errors shown to users)
+- Repository documentation (README, ADRs, technical docs)
+- Commit messages and PR descriptions
+- Configuration values that are human-readable text intended for the repo
+
+Do not switch the project to Croatian or mix languages in artifacts above unless the user explicitly asks for an exception.
+
+## Conversation language (Croatian)
+
+**Reply to the user in Croatian (hr).** Explanations, plans, questions, and summaries addressed to the user should be in Croatian. Code and quoted technical identifiers stay as written in the project (English).

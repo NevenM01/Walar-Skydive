@@ -1,0 +1,153 @@
+{
+  "workbook": "D:\\Walar Skydive\\docs\\walar-spec\\WALAR 2026-01-01.xlsx",
+  "sheet_count": 21,
+  "sheets": [
+    {
+      "name": "WALARArhiv",
+      "csv": "docs\\walar-spec\\extracted\\WALARArhiv.csv",
+      "max_row": 28191,
+      "max_col": 58,
+      "non_empty_rows": 28185
+    },
+    {
+      "name": "WALARIN",
+      "csv": "docs\\walar-spec\\extracted\\WALARIN.csv",
+      "max_row": 1270,
+      "max_col": 59,
+      "non_empty_rows": 1261
+    },
+    {
+      "name": "CompetitionsRanking",
+      "csv": "docs\\walar-spec\\extracted\\CompetitionsRanking.csv",
+      "max_row": 429,
+      "max_col": 36,
+      "non_empty_rows": 429
+    },
+    {
+      "name": "Popisi",
+      "csv": "docs\\walar-spec\\extracted\\Popisi.csv",
+      "max_row": 93,
+      "max_col": 3,
+      "non_empty_rows": 92
+    },
+    {
+      "name": "WALAR",
+      "csv": "docs\\walar-spec\\extracted\\WALAR.csv",
+      "max_row": 29735,
+      "max_col": 58,
+      "non_empty_rows": 29727
+    },
+    {
+      "name": "Athletes",
+      "csv": "docs\\walar-spec\\extracted\\Athletes.csv",
+      "max_row": 5004,
+      "max_col": 34,
+      "non_empty_rows": 5004
+    },
+    {
+      "name": "FAIBaza",
+      "csv": "docs\\walar-spec\\extracted\\FAIBaza.csv",
+      "max_row": 28789,
+      "max_col": 15,
+      "non_empty_rows": 28789
+    },
+    {
+      "name": "2021-25",
+      "csv": "docs\\walar-spec\\extracted\\2021-25.csv",
+      "max_row": 690,
+      "max_col": 31,
+      "non_empty_rows": 689
+    },
+    {
+      "name": "2020-24",
+      "csv": "docs\\walar-spec\\extracted\\2020-24.csv",
+      "max_row": 611,
+      "max_col": 24,
+      "non_empty_rows": 610
+    },
+    {
+      "name": "pivot style",
+      "csv": "docs\\walar-spec\\extracted\\pivot style.csv",
+      "max_row": 92,
+      "max_col": 8,
+      "non_empty_rows": 91
+    },
+    {
+      "name": "pivot-style",
+      "csv": "docs\\walar-spec\\extracted\\pivot-style.csv",
+      "max_row": 167,
+      "max_col": 10,
+      "non_empty_rows": 166
+    },
+    {
+      "name": "WFSAR",
+      "csv": "docs\\walar-spec\\extracted\\WFSAR.csv",
+      "max_row": 429,
+      "max_col": 57,
+      "non_empty_rows": 429
+    },
+    {
+      "name": "List1",
+      "csv": "docs\\walar-spec\\extracted\\List1.csv",
+      "max_row": 63,
+      "max_col": 2,
+      "non_empty_rows": 46
+    },
+    {
+      "name": "PIVOT",
+      "csv": "docs\\walar-spec\\extracted\\PIVOT.csv",
+      "max_row": 6417,
+      "max_col": 342,
+      "non_empty_rows": 529
+    },
+    {
+      "name": "Legenda",
+      "csv": "docs\\walar-spec\\extracted\\Legenda.csv",
+      "max_row": 136,
+      "max_col": 22,
+      "non_empty_rows": 106
+    },
+    {
+      "name": "PointsPlace",
+      "csv": "docs\\walar-spec\\extracted\\PointsPlace.csv",
+      "max_row": 83,
+      "max_col": 14,
+      "non_empty_rows": 83
+    },
+    {
+      "name": "Rang",
+      "csv": "docs\\walar-spec\\extracted\\Rang.csv",
+      "max_row": 13,
+      "max_col": 3,
+      "non_empty_rows": 13
+    },
+    {
+      "name": "PointsCM",
+      "csv": "docs\\walar-spec\\extracted\\PointsCM.csv",
+      "max_row": 163,
+      "max_col": 18,
+      "non_empty_rows": 163
+    },
+    {
+      "name": "PointsWCS",
+      "csv": "docs\\walar-spec\\extracted\\PointsWCS.csv",
+      "max_row": 30,
+      "max_col": 2,
+      "non_empty_rows": 30
+    },
+    {
+      "name": "Points",
+      "csv": "docs\\walar-spec\\extracted\\Points.csv",
+      "max_row": 88,
+      "max_col": 30,
+      "non_empty_rows": 88
+    },
+    {
+      "name": "struktura",
+      "csv": "docs\\walar-spec\\extracted\\struktura.csv",
+      "max_row": 32,
+      "max_col": 23,
+      "non_empty_rows": 31
+    }
+  ]
+}
