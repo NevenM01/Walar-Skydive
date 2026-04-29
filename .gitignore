@@ -13,6 +13,9 @@ local/
 # Cursor IDE (must stay at repo root for the editor; do not commit)
 .cursor/
 
+# Claude / local assistant config in any package (never commit)
+**/.claude/
+
 # Dependencies
 node_modules/
 
