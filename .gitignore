@@ -1,0 +1,53 @@
+# Local secrets (keep this entry)
+scripts/.import_db.env
+
+# Environment files (allow committed examples only)
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# Vite
+.vite/
+
+# Logs and debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Test coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE (uncomment if you do not commit shared editor config)
+# .idea/
+# .vscode/
+
+# Supabase CLI ephemeral paths (see supabase/.gitignore for more)
+supabase/.branches/
+supabase/.temp/
+
+# Local exports / spreadsheets (do not commit)
+**/WALAR\ 2026-01-01.xlsx

@@ -1,0 +1,7 @@
+# Ephemeral MCP / batch payloads (never commit)
+_batches/
+_chunks/
+_apply_migration_body*.json
+_mcp_part*.sql
+_mcp_part*.json.txt
+.temp/
