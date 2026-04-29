@@ -7,7 +7,7 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-DEFAULT_XLSX = Path(__file__).resolve().parents[1] / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
+DEFAULT_XLSX = Path(__file__).resolve().parents[1] / "local" / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
 
 
 def main() -> None:

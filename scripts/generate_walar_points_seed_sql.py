@@ -8,7 +8,7 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_XLSX = REPO_ROOT / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
+DEFAULT_XLSX = REPO_ROOT / "local" / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
 
 
 def main() -> None:

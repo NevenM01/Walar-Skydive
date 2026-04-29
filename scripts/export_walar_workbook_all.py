@@ -16,8 +16,8 @@ from typing import Any
 from openpyxl import load_workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_XLSX = REPO_ROOT / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
-OUT_DIR = REPO_ROOT / "docs" / "walar-spec" / "extracted"
+DEFAULT_XLSX = REPO_ROOT / "local" / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
+OUT_DIR = REPO_ROOT / "local" / "docs" / "walar-spec" / "extracted"
 
 
 def _safe_filename(name: str) -> str:

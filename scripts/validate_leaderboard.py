@@ -10,7 +10,9 @@ from collections import defaultdict
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-WALARIN_CSV = os.path.join(os.path.dirname(__file__), "..", "docs", "walar-spec", "extracted", "WALARIN.csv")
+WALARIN_CSV = os.path.join(
+    os.path.dirname(__file__), "..", "local", "docs", "walar-spec", "extracted", "WALARIN.csv"
+)
 
 try:
     import psycopg2

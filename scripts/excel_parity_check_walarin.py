@@ -1,9 +1,9 @@
 """Parity-check WALARIN sheet exports against the implemented scoring logic.
 
 Inputs:
-- docs/walar-spec/extracted/WALARIN.csv
-- docs/walar-spec/extracted/PointsCM.csv
-- docs/walar-spec/extracted/PointsPlace.csv
+- local/docs/walar-spec/extracted/WALARIN.csv
+- local/docs/walar-spec/extracted/PointsCM.csv
+- local/docs/walar-spec/extracted/PointsPlace.csv
 
 This script recomputes:
 - WALAR rating (rank factor points) [AV]
@@ -24,7 +24,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-EXTRACTED = REPO_ROOT / "docs" / "walar-spec" / "extracted"
+EXTRACTED = REPO_ROOT / "local" / "docs" / "walar-spec" / "extracted"
 
 
 def _as_bool(v: Any) -> bool:

@@ -13,7 +13,7 @@ import psycopg2
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-EXTRACTED = REPO_ROOT / "docs" / "walar-spec" / "extracted"
+EXTRACTED = REPO_ROOT / "local" / "docs" / "walar-spec" / "extracted"
 _IMPORT_ENV_FILE = REPO_ROOT / "scripts" / ".import_db.env"
 
 

@@ -66,7 +66,7 @@ Početna migracija (`20260324120000_initial_schema.sql`) **ne** sadrži stupac `
 
 Operativni upit: **`../scripts/ops_report_competitions_missing_rang.sql`** — natjecanja bez `competition_rang_code`.
 
-Pravila i lookup tablice (PointsCM / Rang) opisane su u [`docs/walar-spec/rules/README.md`](../docs/walar-spec/rules/README.md).
+Pravila i lookup tablice (PointsCM / Rang) opisane su u [`local/docs/walar-spec/rules/README.md`](../local/docs/walar-spec/rules/README.md) (lokalno, nije u Gitu).
 
 ## Frontend env (`web/`)
 

@@ -1,4 +1,4 @@
-"""Export PointsCM + Rang from the WALAR Excel workbook to docs/walar-spec/rules/."""
+"""Export PointsCM + Rang from the WALAR Excel workbook to local/docs/walar-spec/rules/."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_XLSX = REPO_ROOT / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
-OUT_DIR = REPO_ROOT / "docs" / "walar-spec" / "rules"
+DEFAULT_XLSX = REPO_ROOT / "local" / "docs" / "walar-spec" / "WALAR 2026-01-01.xlsx"
+OUT_DIR = REPO_ROOT / "local" / "docs" / "walar-spec" / "rules"
 
 
 def main() -> None:

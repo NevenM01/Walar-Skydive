@@ -7,6 +7,12 @@ scripts/.import_db.env
 !.env.example
 !**/.env.example
 
+# Workspace-only: AI skills, personal scripts, specs, large exports (not in Git)
+local/
+
+# Cursor IDE (must stay at repo root for the editor; do not commit)
+.cursor/
+
 # Dependencies
 node_modules/
 
@@ -49,5 +55,5 @@ Thumbs.db
 supabase/.branches/
 supabase/.temp/
 
-# Local exports / spreadsheets (do not commit)
+# Spreadsheets at repo root (also under local/ when moved)
 **/WALAR\ 2026-01-01.xlsx
