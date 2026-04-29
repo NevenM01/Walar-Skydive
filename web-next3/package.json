@@ -17,7 +17,7 @@
     "@phosphor-icons/react": "^2.1.7",
     "@react-three/fiber": "^9.5.0",
     "@shadergradient/react": "^2.4.20",
-    "@supabase/supabase-js": "^2.49.8",
+    "@supabase/supabase-js": "^2.105.1",
     "camera-controls": "^3.1.2",
     "framer-motion": "^11.18.0",
     "react": "^19.2.4",
