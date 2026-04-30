@@ -12,6 +12,7 @@ export type AuthContextValue = {
   profile: AppProfile | null
   loading: boolean
   signInWithPassword: (email: string, password: string) => Promise<{ error: Error | null }>
+  resetPasswordForEmail: (email: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
 }

@@ -11,9 +11,15 @@ type RejectPayload = {
   reason?: string | null
 }
 
+type InvitePayload = {
+  requestId: string
+  inviteEmail?: string | null
+}
+
 type Body =
   | { action: 'approve'; payload: ApprovePayload }
   | { action: 'reject'; payload: RejectPayload }
+  | { action: 'invite'; payload: InvitePayload }
 
 async function findUserIdByEmail(
   adminClient: any,
@@ -73,6 +79,41 @@ Deno.serve(async (req) => {
       .single()
     if (error) return json({ error: error.message }, 500)
     return json({ data })
+  }
+
+  if (body.action === 'invite') {
+    const payload = body.payload
+    const requestId = String(payload?.requestId ?? '').trim()
+    if (!requestId) return json({ error: 'requestId is required' }, 400)
+
+    const { data: reqRow, error: rErr } = await adminClient
+      .from('athlete_profile_edit_requests')
+      .select('id, email')
+      .eq('id', requestId)
+      .single()
+    if (rErr) return json({ error: rErr.message }, 500)
+    if (!reqRow) return json({ error: 'Request not found' }, 404)
+
+    const inviteEmail = (payload?.inviteEmail ?? reqRow.email ?? '').toString().trim().toLowerCase()
+    if (!inviteEmail) return json({ error: 'Email is required' }, 400)
+
+    // Prefer lookup first to avoid hitting invite rate limits for already-registered users.
+    const existingUserId = await findUserIdByEmail(adminClient, inviteEmail)
+    if (existingUserId) {
+      return json({ data: { email: inviteEmail, userId: existingUserId, invited: false } })
+    }
+
+    const inviteFn = (adminClient as any)?.auth?.admin?.inviteUserByEmail
+    if (typeof inviteFn !== 'function') {
+      return json({ error: 'Admin invite API is not available in this environment.' }, 500)
+    }
+
+    const { data: invited, error: iErr } = await inviteFn.call(adminClient.auth.admin, inviteEmail)
+    if (iErr) return json({ error: iErr.message }, 500)
+    const userId = (invited?.user?.id ?? null) as string | null
+    if (!userId) return json({ error: 'Invite succeeded but user id is missing.' }, 500)
+
+    return json({ data: { email: inviteEmail, userId, invited: true } })
   }
 
   if (body.action === 'approve') {

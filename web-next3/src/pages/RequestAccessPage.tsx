@@ -25,6 +25,7 @@ export default function RequestAccessPage() {
   const [athleteOptions, setAthleteOptions] = useState<AthletePick[]>([])
   const [loadingAthletes, setLoadingAthletes] = useState(false)
   const [selected, setSelected] = useState<AthletePick | null>(null)
+  const [manualOpen, setManualOpen] = useState(false)
 
   const [manualFullName, setManualFullName] = useState('')
   const [manualCountryCode, setManualCountryCode] = useState('')
@@ -160,102 +161,134 @@ export default function RequestAccessPage() {
           </div>
         </label>
 
-        <div>
-          <p className={authLabelClass}>Find your athlete profile</p>
-          <div className={`${authFieldShellClass} mt-2`}>
-            <MagnifyingGlass
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]"
-              size={20}
-              aria-hidden
-            />
-            <input
-              type="text"
+        {manualOpen ? (
+          <div className="rounded-[16px] border border-[var(--border-col)] bg-[color-mix(in_srgb,var(--surface)_92%,var(--accent-subtle))] p-4">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold text-[var(--text-col)]">Manual details</p>
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={() => setManualOpen(false)}
+                className="text-xs font-semibold text-[var(--muted)] hover:text-[var(--text-col)] transition disabled:opacity-55"
+              >
+                Search athlete instead
+              </button>
+            </div>
+            <div className="mt-3 grid grid-cols-1 gap-3">
+              <div className={authFieldShellClass}>
+                <input
+                  type="text"
+                  disabled={submitting}
+                  className={authInputClassNoLeftIcon}
+                  placeholder="Full name"
+                  value={manualFullName}
+                  onChange={(e) => setManualFullName(e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className={authFieldShellClass}>
+                  <input
+                    type="text"
+                    disabled={submitting}
+                    className={authInputClassNoLeftIcon}
+                    placeholder="Country code (optional)"
+                    value={manualCountryCode}
+                    onChange={(e) => setManualCountryCode(e.target.value)}
+                  />
+                </div>
+                <div className={authFieldShellClass}>
+                  <input
+                    type="text"
+                    disabled={submitting}
+                    className={authInputClassNoLeftIcon}
+                    placeholder="FAI licence (optional)"
+                    value={manualFaiLicence}
+                    onChange={(e) => setManualFaiLicence(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className={authFieldShellClass}>
+                <input
+                  type="text"
+                  disabled={submitting}
+                  className={authInputClassNoLeftIcon}
+                  placeholder="Year of birth (optional)"
+                  value={manualYearOfBirth}
+                  onChange={(e) => setManualYearOfBirth(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div>
+              <p className={authLabelClass}>Find your athlete profile</p>
+              <div className={`${authFieldShellClass} mt-2`}>
+                <MagnifyingGlass
+                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]"
+                  size={20}
+                  aria-hidden
+                />
+                <input
+                  type="text"
+                  disabled={submitting}
+                  className="w-full rounded-[14px] border-0 bg-transparent py-3 pl-11 pr-3.5 text-sm text-[var(--text-col)] outline-none placeholder:text-[var(--muted)] disabled:opacity-55"
+                  placeholder="Type at least 2 characters…"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value)
+                    setSelected(null)
+                    if (manualOpen) setManualOpen(false)
+                  }}
+                />
+              </div>
+
+              {selected ? (
+                <p className="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
+                  Selected: <strong>{selected.displayName}</strong> ({selected.countryCode})
+                </p>
+              ) : null}
+
+              {!selected && loadingAthletes ? (
+                <p className="mt-2 text-xs text-[var(--muted)]">Searching…</p>
+              ) : !selected && athleteOptions.length ? (
+                <div className="mt-2 rounded-[14px] border border-[var(--border-col)] overflow-hidden">
+                  {athleteOptions.map((a) => (
+                    <button
+                      key={a.id}
+                      type="button"
+                      disabled={submitting}
+                      onClick={() => {
+                        setSelected(a)
+                        setAthleteOptions([])
+                      }}
+                      className="w-full text-left px-3.5 py-2.5 text-sm hover:bg-[var(--accent-subtle)] transition disabled:opacity-55"
+                    >
+                      <span className="font-semibold text-[var(--text-col)]">{a.displayName}</span>{' '}
+                      <span className="text-[var(--muted)]">({a.countryCode})</span>
+                    </button>
+                  ))}
+                </div>
+              ) : !selected && query.trim().length >= 2 ? (
+                <p className="mt-2 text-xs text-[var(--muted)]">No matches. Use manual details instead.</p>
+              ) : null}
+            </div>
+
+            <button
+              type="button"
               disabled={submitting}
-              className="w-full rounded-[14px] border-0 bg-transparent py-3 pl-11 pr-3.5 text-sm text-[var(--text-col)] outline-none placeholder:text-[var(--muted)] disabled:opacity-55"
-              placeholder="Type at least 2 characters…"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value)
+              onClick={() => {
+                setManualOpen(true)
                 setSelected(null)
+                setQuery('')
+                setAthleteOptions([])
               }}
-            />
-          </div>
-
-          {selected ? (
-            <p className="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
-              Selected: <strong>{selected.displayName}</strong> ({selected.countryCode})
-            </p>
-          ) : null}
-
-          {loadingAthletes ? (
-            <p className="mt-2 text-xs text-[var(--muted)]">Searching…</p>
-          ) : athleteOptions.length ? (
-            <div className="mt-2 rounded-[14px] border border-[var(--border-col)] overflow-hidden">
-              {athleteOptions.map((a) => (
-                <button
-                  key={a.id}
-                  type="button"
-                  disabled={submitting}
-                  onClick={() => setSelected(a)}
-                  className="w-full text-left px-3.5 py-2.5 text-sm hover:bg-[var(--accent-subtle)] transition disabled:opacity-55"
-                >
-                  <span className="font-semibold text-[var(--text-col)]">{a.displayName}</span>{' '}
-                  <span className="text-[var(--muted)]">({a.countryCode})</span>
-                </button>
-              ))}
-            </div>
-          ) : query.trim().length >= 2 ? (
-            <p className="mt-2 text-xs text-[var(--muted)]">No matches. Use manual details below.</p>
-          ) : null}
-        </div>
-
-        <div className="rounded-[16px] border border-[var(--border-col)] bg-[color-mix(in_srgb,var(--surface)_92%,var(--accent-subtle))] p-4">
-          <p className="text-sm font-semibold text-[var(--text-col)]">Manual details (if not found)</p>
-          <div className="mt-3 grid grid-cols-1 gap-3">
-            <div className={authFieldShellClass}>
-              <input
-                type="text"
-                disabled={submitting}
-                className={authInputClassNoLeftIcon}
-                placeholder="Full name"
-                value={manualFullName}
-                onChange={(e) => setManualFullName(e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className={authFieldShellClass}>
-                <input
-                  type="text"
-                  disabled={submitting}
-                  className={authInputClassNoLeftIcon}
-                  placeholder="Country code (optional)"
-                  value={manualCountryCode}
-                  onChange={(e) => setManualCountryCode(e.target.value)}
-                />
-              </div>
-              <div className={authFieldShellClass}>
-                <input
-                  type="text"
-                  disabled={submitting}
-                  className={authInputClassNoLeftIcon}
-                  placeholder="FAI licence (optional)"
-                  value={manualFaiLicence}
-                  onChange={(e) => setManualFaiLicence(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className={authFieldShellClass}>
-              <input
-                type="text"
-                disabled={submitting}
-                className={authInputClassNoLeftIcon}
-                placeholder="Year of birth (optional)"
-                value={manualYearOfBirth}
-                onChange={(e) => setManualYearOfBirth(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
+              className="text-xs font-semibold text-[var(--muted)] hover:text-[var(--text-col)] transition text-left disabled:opacity-55"
+            >
+              Can’t find your athlete? Enter manual details
+            </button>
+          </>
+        )}
 
         <div className="rounded-[16px] border border-[var(--border-col)] bg-[color-mix(in_srgb,var(--surface)_92%,var(--accent-subtle))] p-4">
           <p className="text-sm font-semibold text-[var(--text-col)]">ID document</p>

@@ -228,6 +228,8 @@ export default function AdminDuplicatesPage() {
             <option value="all">All</option>
             <option value="fai">FAI</option>
             <option value="fai_mismatch">FAI mismatch (same name+country, different FAI)</option>
+            <option value="name">Name only (any country)</option>
+            <option value="name_fuzzy">Name fuzzy (similar)</option>
             <option value="name_dob">Name + DOB</option>
             <option value="name_country">Name + Country</option>
             <option value="name_core">Name core (XX/XXX, team suffix)</option>

@@ -50,6 +50,11 @@ export default function AdminProfileRequestsPage() {
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(total / PAGE_SIZE)), [total])
 
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [detailsRow, setDetailsRow] = useState<ProfileEditRequestRow | null>(null)
+  const [detailsIdDocUrl, setDetailsIdDocUrl] = useState<string | null>(null)
+  const [detailsLoadingDoc, setDetailsLoadingDoc] = useState(false)
+
   useEffect(() => {
     setPage((p) => Math.min(Math.max(1, p), totalPages))
   }, [totalPages])
@@ -138,6 +143,33 @@ export default function AdminProfileRequestsPage() {
     setAthleteOptions([])
     setDialogOpen(true)
   }, [])
+
+  const openDetails = useCallback((r: ProfileEditRequestRow) => {
+    setDetailsRow(r)
+    setDetailsIdDocUrl(null)
+    setDetailsLoadingDoc(false)
+    setDetailsOpen(true)
+    if (!r.id_document_path) return
+    setDetailsLoadingDoc(true)
+    void (async () => {
+      try {
+        const url = await fetchIdDocumentSignedUrl(r.id_document_path as string)
+        setDetailsIdDocUrl(url)
+      } catch (e) {
+        showToast(e instanceof Error ? e.message : 'Failed to load ID document preview.', 'default')
+      } finally {
+        setDetailsLoadingDoc(false)
+      }
+    })()
+  }, [showToast])
+
+  const closeDetails = useCallback(() => {
+    if (saving) return
+    setDetailsOpen(false)
+    setDetailsRow(null)
+    setDetailsIdDocUrl(null)
+    setDetailsLoadingDoc(false)
+  }, [saving])
 
   const closeDialog = useCallback(() => {
     if (saving) return
@@ -291,28 +323,36 @@ export default function AdminProfileRequestsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {r.status === 'pending' ? (
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          className="rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-950/40"
-                          disabled={saving}
-                          onClick={() => openApprove(r)}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-800 hover:bg-rose-50 dark:border-rose-700 dark:text-rose-200 dark:hover:bg-rose-950/40"
-                          disabled={saving}
-                          onClick={() => openReject(r)}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-slate-500 dark:text-slate-400">—</span>
-                    )}
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800/70"
+                        disabled={saving}
+                        onClick={() => openDetails(r)}
+                      >
+                        View
+                      </button>
+                      {r.status === 'pending' ? (
+                        <>
+                          <button
+                            type="button"
+                            className="rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-200 dark:hover:bg-emerald-950/40"
+                            disabled={saving}
+                            onClick={() => openApprove(r)}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            type="button"
+                            className="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-800 hover:bg-rose-50 dark:border-rose-700 dark:text-rose-200 dark:hover:bg-rose-950/40"
+                            disabled={saving}
+                            onClick={() => openReject(r)}
+                          >
+                            Reject
+                          </button>
+                        </>
+                      ) : null}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -506,6 +546,136 @@ export default function AdminProfileRequestsPage() {
               >
                 {saving ? 'Working…' : mode === 'approve' ? 'Approve & invite' : 'Reject'}
               </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {detailsOpen && detailsRow ? (
+        <div className="fixed inset-0 z-[210] flex items-end justify-center p-4 sm:items-center" role="presentation">
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px] dark:bg-black/60"
+            aria-label="Close details"
+            onClick={closeDetails}
+            disabled={saving}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="relative z-[1] w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-600 dark:bg-slate-900/95 sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
+              <div>
+                <h2 className="font-display text-lg font-bold text-walar-navy dark:text-slate-100">Request details</h2>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {detailsRow.status} · {formatDt(detailsRow.created_at)} · <span className="font-mono">{detailsRow.id}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeDetails}
+                className="shrink-0 rounded-lg px-2 py-1 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                disabled={saving}
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <div className="space-y-4">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Email</p>
+                  <p className="mt-1 font-mono text-sm text-slate-700 dark:text-slate-200">{detailsRow.email}</p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Athlete selection</p>
+                  <div className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-200">
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">athlete_id:</span>{' '}
+                      <span className="font-mono">{detailsRow.athlete_id ?? '—'}</span>
+                    </p>
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">search text:</span>{' '}
+                      <span>{detailsRow.athlete_search_text ?? '—'}</span>
+                    </p>
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">resolved:</span>{' '}
+                      <span className="font-mono">{detailsRow.resolved_athlete_id ?? '—'}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Manual details</p>
+                  <div className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-200">
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">full name:</span>{' '}
+                      <span>{detailsRow.manual_full_name ?? '—'}</span>
+                    </p>
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">country code:</span>{' '}
+                      <span>{detailsRow.manual_country_code ?? '—'}</span>
+                    </p>
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">FAI licence:</span>{' '}
+                      <span>{detailsRow.manual_fai_licence ?? '—'}</span>
+                    </p>
+                    <p>
+                      <span className="text-slate-500 dark:text-slate-400">year of birth:</span>{' '}
+                      <span>{detailsRow.manual_year_of_birth ?? '—'}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900/70">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Message</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-200">
+                    {detailsRow.message?.trim() ? detailsRow.message : '—'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900/70">
+                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">ID document</p>
+                {detailsRow.id_document_path ? (
+                  <>
+                    <p className="mt-1 font-mono text-xs text-slate-500 dark:text-slate-400">{detailsRow.id_document_path}</p>
+                    <div className="mt-3">
+                      {detailsLoadingDoc ? (
+                        <Skeleton className="h-[360px] w-full rounded-xl" />
+                      ) : detailsIdDocUrl ? (
+                        <a href={detailsIdDocUrl} target="_blank" rel="noreferrer" className="block">
+                          <img
+                            src={detailsIdDocUrl}
+                            alt="ID document preview"
+                            className="h-[360px] w-full rounded-xl border border-slate-200 object-contain bg-slate-50 dark:border-slate-700 dark:bg-slate-800/40"
+                            loading="lazy"
+                          />
+                        </a>
+                      ) : (
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Preview unavailable.</p>
+                      )}
+                    </div>
+                    {detailsIdDocUrl ? (
+                      <div className="mt-3">
+                        <a
+                          href={detailsIdDocUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                        >
+                          Open full image
+                        </a>
+                      </div>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">—</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

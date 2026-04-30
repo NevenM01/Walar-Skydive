@@ -1,7 +1,7 @@
 import { getSupabaseBrowserClient } from './supabaseClient'
 
 export type AthleteDuplicateRow = {
-  group_type: 'fai' | 'fai_mismatch' | 'name_country' | 'name_dob' | 'name_core'
+  group_type: 'fai' | 'fai_mismatch' | 'name' | 'name_fuzzy' | 'name_country' | 'name_dob' | 'name_core'
   group_key: string
   id: string
   display_name: string
@@ -18,13 +18,7 @@ export type AthleteDuplicateRow = {
 export async function fetchAthleteDuplicatesReport(): Promise<AthleteDuplicateRow[]> {
   const sb = getSupabaseBrowserClient()
   if (!sb) throw new Error('Supabase is not configured.')
-  const { data, error } = await sb
-    .from('athlete_duplicates_report')
-    .select('*')
-    .order('group_type', { ascending: true })
-    .order('group_key', { ascending: true })
-    .order('results_count', { ascending: false })
-    .order('created_at', { ascending: true })
+  const { data, error } = await sb.rpc('admin_athlete_duplicates_report')
   if (error) throw new Error(error.message)
   return (data ?? []) as AthleteDuplicateRow[]
 }

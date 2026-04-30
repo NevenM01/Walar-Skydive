@@ -22,9 +22,9 @@ const adminNav = [
   { to: '/admin/ranking', label: 'Ranking' },
   { to: '/admin/duplicates', label: 'Duplicates' },
   { to: '/admin/requests', label: 'Requests' },
-  { to: '/admin/settings', label: 'Settings' },
   { to: '/admin/news', label: 'News' },
   { to: '/admin/partners', label: 'Partners' },
+  { to: '/admin/partner-inquiries', label: 'Partner inquiries' },
 ] as const
 
 const mobileNavLink = ({ isActive }: { isActive: boolean }) =>

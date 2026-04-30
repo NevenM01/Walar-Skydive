@@ -24,7 +24,7 @@ const AdminCsvPage = lazy(() => import('../pages/admin/AdminCsvPage'))
 const AdminRankingPage = lazy(() => import('../pages/admin/AdminRankingPage'))
 const AdminNewsPage = lazy(() => import('../pages/admin/AdminNewsPage'))
 const AdminPartnersPage = lazy(() => import('../pages/admin/AdminPartnersPage'))
-const AdminSettingsPage = lazy(() => import('../pages/admin/AdminSettingsPage'))
+const AdminPartnerInquiriesPage = lazy(() => import('../pages/admin/AdminPartnerInquiriesPage'))
 const AdminProfileRequestsPage = lazy(() => import('../pages/admin/AdminProfileRequestsPage'))
 const AdminDuplicatesPage = lazy(() => import('../pages/admin/AdminDuplicatesPage'))
 
@@ -83,9 +83,16 @@ const router = createBrowserRouter([
           { path: 'ranking', element: <Suspense fallback={<PageFallback />}><AdminRankingPage /></Suspense> },
           { path: 'duplicates', element: <Suspense fallback={<PageFallback />}><AdminDuplicatesPage /></Suspense> },
           { path: 'requests', element: <Suspense fallback={<PageFallback />}><AdminProfileRequestsPage /></Suspense> },
-          { path: 'settings', element: <Suspense fallback={<PageFallback />}><AdminSettingsPage /></Suspense> },
           { path: 'news', element: <Suspense fallback={<PageFallback />}><AdminNewsPage /></Suspense> },
           { path: 'partners', element: <Suspense fallback={<PageFallback />}><AdminPartnersPage /></Suspense> },
+          {
+            path: 'partner-inquiries',
+            element: (
+              <Suspense fallback={<PageFallback />}>
+                <AdminPartnerInquiriesPage />
+              </Suspense>
+            ),
+          },
           { path: '*', element: <Navigate to="/admin/athletes" replace /> },
         ],
       },

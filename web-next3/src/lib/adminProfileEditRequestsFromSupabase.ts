@@ -93,6 +93,27 @@ export async function approveProfileEditRequest(params: {
   return res.data as ProfileEditRequestRow
 }
 
+export async function sendInviteForProfileEditRequest(params: {
+  requestId: string
+  inviteEmail?: string | null
+}): Promise<{ email: string; userId: string; invited: boolean }> {
+  const sb = getSupabaseBrowserClient()
+  if (!sb) throw new Error('Supabase is not configured.')
+
+  const { data: res, error } = await sb.functions.invoke('admin-profile-edit-requests', {
+    body: {
+      action: 'invite',
+      payload: {
+        requestId: params.requestId,
+        inviteEmail: params.inviteEmail ?? null,
+      },
+    },
+  })
+  if (error) throw new Error(error.message)
+  if (res?.error) throw new Error(res.error)
+  return res.data as { email: string; userId: string; invited: boolean }
+}
+
 export async function rejectProfileEditRequest(params: {
   requestId: string
   reason?: string | null

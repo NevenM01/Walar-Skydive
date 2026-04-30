@@ -98,6 +98,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error ? new Error(error.message) : null }
   }, [])
 
+  const resetPasswordForEmail = useCallback(async (email: string) => {
+    const sb = getSupabaseBrowserClient()
+    if (!sb) {
+      return { error: new Error('Supabase is not configured.') }
+    }
+    const redirectTo = `${window.location.origin}/login`
+    const { error } = await sb.auth.resetPasswordForEmail(email.trim(), { redirectTo })
+    return { error: error ? new Error(error.message) : null }
+  }, [])
+
   const signOut = useCallback(async () => {
     const sb = getSupabaseBrowserClient()
     if (sb) await sb.auth.signOut()
@@ -113,10 +123,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       loading,
       signInWithPassword,
+      resetPasswordForEmail,
       signOut,
       refreshProfile,
     }),
-    [session, user, profile, loading, signInWithPassword, signOut, refreshProfile],
+    [session, user, profile, loading, signInWithPassword, resetPasswordForEmail, signOut, refreshProfile],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
