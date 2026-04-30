@@ -1,9 +1,9 @@
 -- Make athlete-avatars bucket private (use signed URLs).
 -- NOTE: bucket row already created in 20260416131000_athlete_avatar_url_storage.sql.
 
-update storage.buckets
-set public = false
-where id = 'athlete-avatars';
+insert into storage.buckets (id, name, public)
+values ('athlete-avatars', 'athlete-avatars', true)
+on conflict (id) do update set public = true;
 
 -- Remove public select policy.
 drop policy if exists "athlete_avatars_select_public" on storage.objects;
