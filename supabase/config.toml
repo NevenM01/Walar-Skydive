@@ -394,3 +394,21 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 # declarative_schema_path = "./declarative"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Per-function settings.
+# Public functions are reachable by anonymous visitors; security is enforced by
+# RLS and explicit `grant execute ... to anon` on the underlying RPCs (see
+# supabase/migrations). Disabling gateway JWT verification here prevents
+# requests from being rejected when a browser carries a malformed access_token
+# from a stale local session.
+[functions.public-leaderboard]
+verify_jwt = false
+
+[functions.public-athlete]
+verify_jwt = false
+
+[functions.public-profile-edit-request]
+verify_jwt = false
+
+[functions.public-upload-id-document]
+verify_jwt = false
