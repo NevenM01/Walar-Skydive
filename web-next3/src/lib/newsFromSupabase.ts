@@ -1,6 +1,6 @@
 import type { PostgrestError } from '@supabase/supabase-js'
 import type { NewsPost, NewsPostAdmin } from '../types'
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient, getSupabaseBrowserClient } from './supabaseClient'
 
 type NewsRow = {
   id: string
@@ -90,7 +90,7 @@ const selectColsPublic =
 const selectColsAdmin = `${selectColsPublic}, is_home_priority`
 
 export async function fetchNewsPostsFromSupabase(): Promise<NewsPost[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -107,7 +107,7 @@ export async function fetchNewsPostsFromSupabase(): Promise<NewsPost[]> {
 }
 
 export async function fetchNewsPostByIdFromSupabase(id: string): Promise<NewsPost | null> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -154,7 +154,7 @@ export async function fetchNewsPostsForAdminFromSupabase(): Promise<NewsPostAdmi
 
 /** Up to 2 published posts for the home strip: pinned + latest other, or two latest. */
 export async function fetchHomepageNewsStripFromSupabase(): Promise<NewsPost[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }

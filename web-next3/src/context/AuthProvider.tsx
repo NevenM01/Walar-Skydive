@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
+import { isJwtShaped } from '../lib/jwtShape'
 import { getSupabaseBrowserClient, isSupabaseConfigured } from '../lib/supabaseClient'
 import { AuthContext, type AppProfile } from './auth-context'
 
@@ -52,6 +53,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         data: { session: s },
       } = await sb.auth.getSession()
       if (cancelled) return
+      if (s && !isJwtShaped(s.access_token)) {
+        await sb.auth.signOut({ scope: 'local' })
+        if (cancelled) return
+        setSession(null)
+        setUser(null)
+        setProfile(null)
+        setLoading(false)
+        return
+      }
       setSession(s)
       setUser(s?.user ?? null)
       if (s?.user?.id) {
@@ -68,6 +78,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = sb.auth.onAuthStateChange((_event, newSession) => {
+      if (newSession && !isJwtShaped(newSession.access_token)) {
+        void sb.auth.signOut({ scope: 'local' })
+        setSession(null)
+        setUser(null)
+        setProfile(null)
+        setLoading(false)
+        return
+      }
       setSession(newSession)
       setUser(newSession?.user ?? null)
       setProfile(null)

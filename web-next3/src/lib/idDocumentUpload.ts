@@ -1,9 +1,9 @@
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient } from './supabaseClient'
 
 const MAX_BYTES = 5 * 1024 * 1024
 
 export async function uploadIdDocumentToStorage(file: File): Promise<string> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) throw new Error('Supabase is not configured.')
 
   if (!file.type.startsWith('image/')) {

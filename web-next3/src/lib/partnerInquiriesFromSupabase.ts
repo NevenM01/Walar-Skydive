@@ -1,4 +1,4 @@
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient } from './supabaseClient'
 
 export type PartnerInquiryPayload = {
   organizationName: string
@@ -9,7 +9,7 @@ export type PartnerInquiryPayload = {
 }
 
 export async function submitPartnerInquiry(payload: PartnerInquiryPayload): Promise<void> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) throw new Error('Supabase is not configured.')
 
   const { error } = await sb.from('walar_partner_inquiries').insert({

@@ -1,4 +1,4 @@
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient } from './supabaseClient'
 
 export type ProfileEditRequestPayload = {
   email: string
@@ -19,7 +19,7 @@ export type ProfileEditRequestResult = {
 }
 
 export async function submitProfileEditRequest(payload: ProfileEditRequestPayload): Promise<ProfileEditRequestResult> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) throw new Error('Supabase is not configured.')
 
   const { data: result, error } = await sb.functions.invoke('public-profile-edit-request', {

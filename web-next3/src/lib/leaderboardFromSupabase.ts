@@ -1,6 +1,6 @@
 import type { Athlete, LeaderboardFilters, LeaderboardRow } from '../types'
 import { WALAR_RANKING_WINDOW_YEARS } from './walarConstants'
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient } from './supabaseClient'
 import { normalizeUnicodeForDisplay } from './unicodeAthleteDisplay'
 
 type EdgeLeaderboardRow = {
@@ -39,7 +39,7 @@ export async function fetchLeaderboardFromSupabase(
   filters: LeaderboardFilters,
   page?: Partial<LeaderboardPageQuery>,
 ): Promise<{ rows: LeaderboardRow[]; athletes: Athlete[] }> {
-  const client = getSupabaseBrowserClient()
+  const client = getSupabaseAnonPublicClient()
   if (!client) {
     throw new Error('Supabase is not configured')
   }

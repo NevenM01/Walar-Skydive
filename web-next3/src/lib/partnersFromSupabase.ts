@@ -1,6 +1,6 @@
 import type { PostgrestError } from '@supabase/supabase-js'
 import type { ProjectPartner, ProjectPartnerKind } from '../types'
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient, getSupabaseBrowserClient } from './supabaseClient'
 
 type PartnerRow = {
   id: string
@@ -70,7 +70,7 @@ function mapRow(row: PartnerRow): ProjectPartner {
 const selectCols = 'id, name, url, kind, tagline, sort_order'
 
 export async function fetchProjectPartnersFromSupabase(): Promise<ProjectPartner[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }

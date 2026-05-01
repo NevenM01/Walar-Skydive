@@ -1,5 +1,5 @@
 import type { Athlete, Competition } from '../types'
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient, getSupabaseBrowserClient } from './supabaseClient'
 import { WALAR_RANKING_WINDOW_YEARS } from './walarConstants'
 import { normalizeUnicodeForDisplay } from './unicodeAthleteDisplay'
 
@@ -58,7 +58,7 @@ const ATHLETE_SELECT =
   'id, user_id, display_name, country_code, gender, date_of_birth, fai_licence, dob_display_mode, gdpr_publish_full_name, gdpr_consent_given, bio, club, website_url, instagram_url, facebook_url, avatar_url, pending_avatar_path, pending_avatar_updated_at' as const
 
 export async function fetchAthleteByIdFromSupabase(id: string): Promise<Athlete | null> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -110,7 +110,7 @@ export async function fetchAthleteByIdFromSupabase(id: string): Promise<Athlete 
 }
 
 export async function fetchAthletesFromSupabase(): Promise<Athlete[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -124,7 +124,7 @@ export async function fetchAthletesFromSupabase(): Promise<Athlete[]> {
 
 /** Athletes with `user_id` set (linked Supabase auth account). Uses exact count only; no row payload. */
 export async function fetchLinkedProfileAthletesCountFromSupabase(): Promise<number> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -145,7 +145,7 @@ export type AthletesPageQuery = {
 export async function fetchAthletesPageFromSupabase(
   params: AthletesPageQuery,
 ): Promise<{ rows: Athlete[]; total: number }> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -302,7 +302,7 @@ type CompetitionJoinRow = {
 export async function fetchCompetitionsForAthleteFromSupabase(
   athleteId: string,
 ): Promise<Competition[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }

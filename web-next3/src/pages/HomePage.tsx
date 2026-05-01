@@ -32,21 +32,26 @@ export default function HomePage() {
 
   const load = useCallback(async () => {
     setLoading(true)
-    try {
-      const [lb, evs, linkedCount] = await Promise.all([
-        getLeaderboard(DEFAULT_FILTERS),
-        getEvents(),
-        getLinkedProfileAthletesCount().catch((err) => {
-          console.error(err)
-          return 0
-        }),
-      ])
-      setRows(lb.rows)
-      setAthletes(lb.athletes)
-      setEvents(evs)
-      setLinkedProfileAthletesCount(linkedCount)
-    } catch (e) {
-      console.error(e)
+    const settled = await Promise.allSettled([
+      getLeaderboard(DEFAULT_FILTERS),
+      getEvents(),
+      getLinkedProfileAthletesCount(),
+    ])
+    if (settled[0].status === 'fulfilled') {
+      setRows(settled[0].value.rows)
+      setAthletes(settled[0].value.athletes)
+    } else {
+      console.error(settled[0].reason)
+    }
+    if (settled[1].status === 'fulfilled') {
+      setEvents(settled[1].value)
+    } else {
+      console.error(settled[1].reason)
+    }
+    if (settled[2].status === 'fulfilled') {
+      setLinkedProfileAthletesCount(settled[2].value)
+    } else {
+      console.error(settled[2].reason)
     }
     try {
       setNews(await getHomepageNewsPosts())

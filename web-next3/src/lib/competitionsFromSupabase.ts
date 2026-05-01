@@ -1,5 +1,5 @@
 import type { Competition, CompetitionStatus } from '../types'
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient, getSupabaseBrowserClient } from './supabaseClient'
 
 type CompetitionRow = {
   id: string
@@ -33,7 +33,7 @@ const COMPETITION_SELECT =
   'id, name, start_date, end_date, location, category, status, fai_class, description, unique_label' as const
 
 export async function fetchCompetitionsFromSupabase(): Promise<Competition[]> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
@@ -48,7 +48,7 @@ export async function fetchCompetitionsFromSupabase(): Promise<Competition[]> {
 export async function fetchCompetitionByIdFromSupabase(
   id: string,
 ): Promise<Competition | null> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }

@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { handleCors, json } from '../_shared/adminClient.ts'
 import { flagUrlFromIso2, sportCodeToIso2 } from '../_shared/countryCodes.ts'
+import { forwardableAuthorizationHeader } from '../_shared/forwardableAuth.ts'
 
 type Payload = {
   gender?: string
@@ -42,7 +43,7 @@ Deno.serve(async (req) => {
   if (cors) return cors
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405)
 
-  const authHeader = req.headers.get('Authorization')
+  const authHeader = forwardableAuthorizationHeader(req.headers.get('Authorization'))
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!
   const client = createClient(
     supabaseUrl,

@@ -1,10 +1,10 @@
-import { getSupabaseBrowserClient } from './supabaseClient'
+import { getSupabaseAnonPublicClient, getSupabaseBrowserClient } from './supabaseClient'
 
 /** DB key in `walar_app_settings`; when true, leaderboard includes athletes without FAI licence number. */
 export const SETTING_RANK_WITHOUT_FAI_LICENCE = 'rank_athletes_without_fai_licence'
 
 export async function fetchRankWithoutFaiLicenceSetting(): Promise<boolean> {
-  const sb = getSupabaseBrowserClient()
+  const sb = getSupabaseAnonPublicClient()
   if (!sb) throw new Error('Supabase is not configured.')
 
   const { data, error } = await sb
