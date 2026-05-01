@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { ScrollAltitudeScene } from './ScrollAltitudeScene'
+import { CookieBanner } from './CookieBanner'
+import { SeoHead } from '../seo/SeoHead'
 
 export function PageLayout() {
   const { pathname, hash } = useLocation()
@@ -15,6 +17,7 @@ export function PageLayout() {
 
   return (
     <div className="relative flex min-h-[100dvh] flex-col">
+      <SeoHead />
       <ScrollAltitudeScene />
       <div className="relative z-10 flex min-h-[100dvh] flex-1 flex-col">
         <Header />
@@ -22,6 +25,7 @@ export function PageLayout() {
           <Outlet />
         </main>
         <Footer />
+        <CookieBanner />
       </div>
     </div>
   )

@@ -6,6 +6,8 @@ import type { Athlete } from '../types'
 import { clearAthleteAvatarStorageForUser, uploadAthleteAvatarToStorage } from '../lib/athleteAvatarUpload'
 import { fetchAvatarSignedUrl } from '../lib/avatarSignedUrl'
 import { fetchMyAthleteFromSupabase, updateMyAthleteProfileInSupabase } from '../lib/athletesFromSupabase'
+import { exportMyData } from '../lib/exportMyData'
+import { deleteMyAccount } from '../lib/deleteMyAccount'
 import { Skeleton } from '../components/ui/Skeleton'
 import { ErrorMessage } from '../components/shared/ErrorMessage'
 
@@ -44,6 +46,8 @@ export default function AccountPage() {
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [avatarUploading, setAvatarUploading] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
   const [form, setForm] = useState<FormState>({
@@ -240,79 +244,80 @@ export default function AccountPage() {
           </div>
         </div>
       ) : (
-        <form
-          onSubmit={(e) => void onSubmit(e)}
-          className="rounded-2xl border border-[var(--border-col)] bg-[var(--surface)] p-6 md:p-8 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)]"
-        >
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-            <div className="flex flex-col sm:flex-row sm:items-start gap-4 min-w-0">
-              <div className="relative shrink-0">
-                {pendingAvatarSignedUrl || approvedAvatarSignedUrl ? (
-                  <img
-                    src={pendingAvatarSignedUrl || approvedAvatarSignedUrl || ''}
-                    alt=""
-                    className="w-24 h-24 rounded-2xl object-cover border border-[var(--border-col)] bg-[var(--bg)]"
-                  />
-                ) : (
-                  <div className="w-24 h-24 rounded-2xl border border-[var(--border-col)] bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
-                    <span className="font-display font-black text-xl text-[var(--muted)]">{avatarInitials}</span>
-                  </div>
-                )}
-                {avatarUploading ? (
-                  <div className="absolute inset-0 rounded-2xl bg-[var(--bg)]/80 flex items-center justify-center text-xs font-medium text-[var(--muted)]">
-                    …
-                  </div>
-                ) : null}
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-display font-semibold uppercase tracking-widest text-[var(--muted)]">Athlete</p>
-                <p className="mt-1 font-display font-black text-2xl tracking-tight text-[var(--text-col)]">
-                  {athlete.displayName}
-                </p>
-                <input
-                  ref={avatarInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  className="sr-only"
-                  aria-label="Upload profile photo"
-                  disabled={saving || avatarUploading}
-                  onChange={(ev) => void onAvatarFileChange(ev)}
-                />
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
+        <div className="space-y-6">
+          <form
+            onSubmit={(e) => void onSubmit(e)}
+            className="rounded-2xl border border-[var(--border-col)] bg-[var(--surface)] p-6 md:p-8 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)]"
+          >
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-4 min-w-0">
+                <div className="relative shrink-0">
+                  {pendingAvatarSignedUrl || approvedAvatarSignedUrl ? (
+                    <img
+                      src={pendingAvatarSignedUrl || approvedAvatarSignedUrl || ''}
+                      alt=""
+                      className="w-24 h-24 rounded-2xl object-cover border border-[var(--border-col)] bg-[var(--bg)]"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-2xl border border-[var(--border-col)] bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
+                      <span className="font-display font-black text-xl text-[var(--muted)]">{avatarInitials}</span>
+                    </div>
+                  )}
+                  {avatarUploading ? (
+                    <div className="absolute inset-0 rounded-2xl bg-[var(--bg)]/80 flex items-center justify-center text-xs font-medium text-[var(--muted)]">
+                      …
+                    </div>
+                  ) : null}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-display font-semibold uppercase tracking-widest text-[var(--muted)]">Athlete</p>
+                  <p className="mt-1 font-display font-black text-2xl tracking-tight text-[var(--text-col)]">
+                    {athlete.displayName}
+                  </p>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    className="sr-only"
+                    aria-label="Upload profile photo"
                     disabled={saving || avatarUploading}
-                    onClick={() => avatarInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-col)] bg-[var(--bg)] px-3 py-2 text-sm font-semibold text-[var(--text-col)] hover:bg-[var(--accent-subtle)] transition disabled:opacity-50"
-                  >
-                    <Camera size={18} weight="bold" />
-                    {approvedAvatarSignedUrl || pendingAvatarSignedUrl ? 'Change photo' : 'Upload photo'}
-                  </button>
-                  {athlete.pendingAvatarPath ? (
+                    onChange={(ev) => void onAvatarFileChange(ev)}
+                  />
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
                     <button
                       type="button"
                       disabled={saving || avatarUploading}
-                      onClick={() => void onRemoveAvatar()}
-                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200/80 dark:border-rose-900/50 px-3 py-2 text-sm font-semibold text-rose-800 dark:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition disabled:opacity-50"
+                      onClick={() => avatarInputRef.current?.click()}
+                      className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-col)] bg-[var(--bg)] px-3 py-2 text-sm font-semibold text-[var(--text-col)] hover:bg-[var(--accent-subtle)] transition disabled:opacity-50"
                     >
-                      <Trash size={18} weight="bold" />
-                      Cancel submission
+                      <Camera size={18} weight="bold" />
+                      {approvedAvatarSignedUrl || pendingAvatarSignedUrl ? 'Change photo' : 'Upload photo'}
                     </button>
-                  ) : null}
+                    {athlete.pendingAvatarPath ? (
+                      <button
+                        type="button"
+                        disabled={saving || avatarUploading}
+                        onClick={() => void onRemoveAvatar()}
+                        className="inline-flex items-center gap-2 rounded-xl border border-rose-200/80 dark:border-rose-900/50 px-3 py-2 text-sm font-semibold text-rose-800 dark:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition disabled:opacity-50"
+                      >
+                        <Trash size={18} weight="bold" />
+                        Cancel submission
+                      </button>
+                    ) : null}
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--muted)]">
+                    JPEG, PNG, WebP or GIF · max 3 MB
+                    {athlete.pendingAvatarPath ? ' · Waiting for approval' : ''}
+                  </p>
                 </div>
-                <p className="mt-2 text-xs text-[var(--muted)]">
-                  JPEG, PNG, WebP or GIF · max 3 MB
-                  {athlete.pendingAvatarPath ? ' · Waiting for approval' : ''}
-                </p>
               </div>
+              {saveSuccess ? (
+                <p className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-100 shrink-0">
+                  <CheckCircle size={18} weight="fill" />
+                  {saveSuccess}
+                </p>
+              ) : null}
             </div>
-            {saveSuccess ? (
-              <p className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-100 shrink-0">
-                <CheckCircle size={18} weight="fill" />
-                {saveSuccess}
-              </p>
-            ) : null}
-          </div>
 
           <label className="block">
             <span className="text-sm font-semibold text-[var(--text-col)]">Bio</span>
@@ -395,7 +400,56 @@ export default function AccountPage() {
               <p className="text-xs text-[var(--muted)]">Fix validation errors to save.</p>
             ) : null}
           </div>
-        </form>
+          </form>
+
+          <div className="rounded-2xl border border-[var(--border-col)] bg-[var(--surface)] p-6 md:p-8">
+            <h2 className="font-display font-bold text-xl tracking-tight text-[var(--text-col)]">Privacy &amp; data</h2>
+            <p className="mt-2 text-sm text-[var(--muted)] max-w-[85ch]">
+              You can request a copy of your personal data in JSON format.
+            </p>
+            <div className="mt-4">
+              <button
+                type="button"
+                disabled={exporting}
+                onClick={() => {
+                  setExporting(true)
+                  void exportMyData()
+                    .catch((e) => setSaveError(e instanceof Error ? e.message : 'Export failed.'))
+                    .finally(() => setExporting(false))
+                }}
+                className="inline-flex items-center justify-center rounded-xl border border-[var(--border-col)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--text-col)] hover:bg-[var(--accent-subtle)] transition disabled:opacity-60"
+              >
+                {exporting ? 'Preparing export…' : 'Export my data'}
+              </button>
+            </div>
+
+            <div className="mt-5 rounded-xl border border-rose-200/70 bg-rose-50/60 p-4 dark:border-rose-900/45 dark:bg-rose-950/25">
+              <p className="text-sm font-semibold text-rose-950 dark:text-rose-100">Delete my account</p>
+              <p className="mt-1 text-xs text-rose-900/80 dark:text-rose-200/90 leading-relaxed max-w-[85ch]">
+                This will delete your login account, remove your avatar files, and unlink your athlete profile from your account. Ranking results
+                remain intact.
+              </p>
+              <div className="mt-3">
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => {
+                    if (!window.confirm('Delete your account? This cannot be undone.')) return
+                    if (!window.confirm('Are you absolutely sure?')) return
+                    setDeleting(true)
+                    void deleteMyAccount()
+                      .then(() => window.location.assign('/'))
+                      .catch((e) => setSaveError(e instanceof Error ? e.message : 'Delete failed.'))
+                      .finally(() => setDeleting(false))
+                  }}
+                  className="inline-flex items-center justify-center rounded-xl bg-rose-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-800 disabled:opacity-60"
+                >
+                  {deleting ? 'Deleting…' : 'Delete my account'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

@@ -41,6 +41,9 @@ export function Footer() {
               {[
                 { to: '/rules',    label: 'Rules' },
                 { to: '/partners', label: 'Partners' },
+                { to: '/privacy',  label: 'Privacy' },
+                { to: '/terms',    label: 'Terms' },
+                { to: '/cookies',  label: 'Cookies' },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link to={to} className="text-[var(--muted)] hover:text-[var(--text-col)] transition-colors duration-150">

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Athlete, Competition, LeaderboardFilters, LeaderboardRow } from '../types'
-import { getLeaderboard, getEvents } from '../lib/api'
+import { getEvents, getLeaderboardPage } from '../lib/api'
 import { FilterPanel } from '../components/leaderboard/FilterPanel'
 import { LeaderboardTable } from '../components/leaderboard/LeaderboardTable'
 import { ErrorMessage } from '../components/shared/ErrorMessage'
@@ -15,6 +15,8 @@ const DEFAULT_FILTERS: LeaderboardFilters = {
   competitionId: null,
 }
 
+const PAGE_SIZE = 100
+
 export default function ResultsPage() {
   const [filters,  setFilters]  = useState<LeaderboardFilters>(DEFAULT_FILTERS)
   const [rows,     setRows]     = useState<LeaderboardRow[]>([])
@@ -24,6 +26,7 @@ export default function ResultsPage() {
   const [error,    setError]    = useState<string | null>(null)
   const [athleteNameQuery, setAthleteNameQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(athleteNameQuery), 300)
@@ -44,11 +47,11 @@ export default function ResultsPage() {
     )
   }, [rows, athleteMap, nameQ])
 
-  const loadLeaderboard = useCallback(async (f: LeaderboardFilters) => {
+  const loadLeaderboard = useCallback(async (f: LeaderboardFilters, p: number) => {
     setLoading(true)
     setError(null)
     try {
-      const lb = await getLeaderboard(f)
+      const lb = await getLeaderboardPage(f, { page: p, pageSize: PAGE_SIZE })
       setRows(lb.rows)
       setAthletes(lb.athletes)
     } catch (e) {
@@ -58,11 +61,21 @@ export default function ResultsPage() {
     }
   }, [])
 
-  useEffect(() => { void loadLeaderboard(filters) }, [filters, loadLeaderboard])
+  useEffect(() => {
+    setPage(1)
+  }, [filters])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+  }, [page])
+
+  useEffect(() => { void loadLeaderboard(filters, page) }, [filters, page, loadLeaderboard])
 
   useEffect(() => {
     getEvents().then(setEvents).catch(() => {})
   }, [])
+
+  const hasNextPage = useMemo(() => rows.length === PAGE_SIZE, [rows.length])
 
   return (
     <div className="max-w-[90rem] mx-auto px-4 md:px-6 lg:px-10 py-10 md:py-16">
@@ -97,7 +110,7 @@ export default function ResultsPage() {
       {/* Error */}
       {error && (
         <div className="mb-6">
-          <ErrorMessage message={error} onRetry={() => loadLeaderboard(filters)} />
+          <ErrorMessage message={error} onRetry={() => loadLeaderboard(filters, page)} />
         </div>
       )}
 
@@ -110,7 +123,7 @@ export default function ResultsPage() {
             </>
           ) : (
             <>
-              {rows.length} {rows.length === 1 ? 'athlete' : 'athletes'} ranked
+              Showing {rows.length} {rows.length === 1 ? 'athlete' : 'athletes'} (page {page})
             </>
           )}
         </p>
@@ -128,6 +141,34 @@ export default function ResultsPage() {
             : undefined
         }
       />
+
+      {/* Pagination */}
+      {!loading && !error ? (
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs text-[var(--muted)] font-display tabular">
+            Page {page} · Showing {rows.length} (max {PAGE_SIZE})
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className="rounded-xl border border-[var(--border-col)] bg-[var(--bg)] px-3 py-2 text-sm font-semibold text-[var(--text-col)] shadow-sm hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={page <= 1}
+            >
+              Prev
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage((p) => p + 1)}
+              className="rounded-xl border border-[var(--border-col)] bg-[var(--bg)] px-3 py-2 text-sm font-semibold text-[var(--text-col)] shadow-sm hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!hasNextPage}
+              title={!hasNextPage ? 'No more results' : undefined}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

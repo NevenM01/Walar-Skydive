@@ -41,6 +41,21 @@ export async function fetchIdDocumentSignedUrl(path: string): Promise<string> {
   return url
 }
 
+export async function deleteIdDocumentForProfileEditRequest(params: { requestId: string }): Promise<{ deleted: boolean }> {
+  const sb = getSupabaseBrowserClient()
+  if (!sb) throw new Error('Supabase is not configured.')
+
+  const requestId = params.requestId.trim()
+  if (!requestId) throw new Error('requestId is required.')
+
+  const { data: res, error } = await sb.functions.invoke('admin-delete-id-document', {
+    body: { requestId },
+  })
+  if (error) throw new Error(error.message)
+  if (res?.error) throw new Error(res.error)
+  return (res?.data ?? { deleted: true }) as { deleted: boolean }
+}
+
 export async function fetchProfileEditRequestsFromSupabase(params: {
   status?: ProfileEditRequestStatus | 'all'
   offset: number

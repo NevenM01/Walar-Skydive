@@ -144,6 +144,12 @@ export default function RequestAccessPage() {
       description="Submit a request to edit your athlete profile. After approval, you’ll receive an invite to log in."
     >
       <form onSubmit={(e) => void onSubmit(e)} className="flex flex-1 flex-col space-y-5">
+        <p className="text-xs text-[var(--muted)] leading-relaxed">
+          We process the data you submit to verify profile ownership and provide access to edit your athlete profile. Your ID document is stored
+          privately and is visible only to administrators. See our{' '}
+          <Link to="/privacy" className={authAccentLinkClass}>Privacy Policy</Link>.
+        </p>
+
         <label className={authLabelClass}>
           Email
           <div className={`${authFieldShellClass} mt-2`}>

@@ -44,6 +44,24 @@ export async function getLeaderboard(filters: LeaderboardFilters): Promise<{
   return fetchLeaderboardFromSupabase(filters)
 }
 
+export type LeaderboardPageParams = {
+  page: number
+  pageSize: number
+}
+
+export async function getLeaderboardPage(
+  filters: LeaderboardFilters,
+  page: LeaderboardPageParams,
+): Promise<{ rows: LeaderboardRow[]; athletes: Athlete[] }> {
+  if (!isSupabaseConfigured()) {
+    throw new Error(SUPABASE_NOT_CONFIGURED)
+  }
+  const pageNum = Math.max(1, Math.trunc(page.page))
+  const pageSize = Math.min(500, Math.max(1, Math.trunc(page.pageSize)))
+  const offset = (pageNum - 1) * pageSize
+  return fetchLeaderboardFromSupabase(filters, { offset, limit: pageSize })
+}
+
 export async function getLinkedProfileAthletesCount(): Promise<number> {
   if (!isSupabaseConfigured()) return 0
   return fetchLinkedProfileAthletesCountFromSupabase()

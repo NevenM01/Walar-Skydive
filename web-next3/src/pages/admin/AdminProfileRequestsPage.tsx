@@ -10,6 +10,7 @@ import {
 } from '../../lib/adminFormClasses'
 import {
   approveProfileEditRequest,
+  deleteIdDocumentForProfileEditRequest,
   fetchIdDocumentSignedUrl,
   fetchProfileEditRequestsFromSupabase,
   rejectProfileEditRequest,
@@ -170,6 +171,26 @@ export default function AdminProfileRequestsPage() {
     setDetailsIdDocUrl(null)
     setDetailsLoadingDoc(false)
   }, [saving])
+
+  const deleteDetailsIdDoc = useCallback(async () => {
+    if (!detailsRow?.id) return
+    if (!detailsRow.id_document_path) {
+      showToast('No ID document to delete.', 'default')
+      return
+    }
+    setSaving(true)
+    try {
+      await deleteIdDocumentForProfileEditRequest({ requestId: detailsRow.id })
+      showToast('ID document deleted.', 'success')
+      setDetailsRow((r) => (r ? { ...r, id_document_path: null } : r))
+      setDetailsIdDocUrl(null)
+      await load()
+    } catch (e) {
+      showToast(e instanceof Error ? e.message : 'Failed to delete ID document.', 'default')
+    } finally {
+      setSaving(false)
+    }
+  }, [detailsRow, load, showToast])
 
   const closeDialog = useCallback(() => {
     if (saving) return
@@ -669,6 +690,14 @@ export default function AdminProfileRequestsPage() {
                         >
                           Open full image
                         </a>
+                        <button
+                          type="button"
+                          onClick={() => void deleteDetailsIdDoc()}
+                          disabled={saving}
+                          className="ml-2 inline-flex rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-900 shadow-sm hover:bg-rose-100 disabled:opacity-60 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-100 dark:hover:bg-rose-950/65"
+                        >
+                          Delete ID document
+                        </button>
                       </div>
                     ) : null}
                   </>

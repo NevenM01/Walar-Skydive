@@ -84,6 +84,10 @@ export default function BecomePartnerPage() {
           Tell us about your organisation and how you would like to support the WALAR ranking programme. We'll review
           your inquiry and respond within a few business days.
         </p>
+        <p className="mt-3 text-sm text-[var(--muted)] max-w-[70ch]">
+          By submitting this form, you agree that we will process the personal data you provide to respond to your inquiry. See our{' '}
+          <Link to="/privacy" className="text-[var(--accent)] hover:underline">Privacy Policy</Link>.
+        </p>
       </motion.div>
 
       {success ? (

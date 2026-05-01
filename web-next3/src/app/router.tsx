@@ -15,6 +15,9 @@ const NewsDetailPage = lazy(() => import('../pages/NewsDetailPage'))
 const PartnersPage = lazy(() => import('../pages/PartnersPage'))
 const BecomePartnerPage = lazy(() => import('../pages/BecomePartnerPage'))
 const RulesPage = lazy(() => import('../pages/RulesPage'))
+const PrivacyPolicyPage = lazy(() => import('../pages/PrivacyPolicyPage'))
+const TermsOfServicePage = lazy(() => import('../pages/TermsOfServicePage'))
+const CookiePolicyPage = lazy(() => import('../pages/CookiePolicyPage'))
 const LoginPage = lazy(() => import('../pages/LoginPage'))
 const RequestAccessPage = lazy(() => import('../pages/RequestAccessPage'))
 const AccountPage = lazy(() => import('../pages/AccountPage'))
@@ -58,6 +61,9 @@ const router = createBrowserRouter([
         ),
       },
       { path: 'rules', element: <Suspense fallback={<PageFallback />}><RulesPage /></Suspense> },
+      { path: 'privacy', element: <Suspense fallback={<PageFallback />}><PrivacyPolicyPage /></Suspense> },
+      { path: 'terms', element: <Suspense fallback={<PageFallback />}><TermsOfServicePage /></Suspense> },
+      { path: 'cookies', element: <Suspense fallback={<PageFallback />}><CookiePolicyPage /></Suspense> },
       { path: 'login', element: <Suspense fallback={<PageFallback />}><LoginPage /></Suspense> },
       { path: 'request-access', element: <Suspense fallback={<PageFallback />}><RequestAccessPage /></Suspense> },
       { path: 'register', element: <Navigate to="/request-access" replace /> },

@@ -4,6 +4,7 @@ import { getSupabaseBrowserClient } from './supabaseClient'
 import { normalizeUnicodeForDisplay } from './unicodeAthleteDisplay'
 
 type EdgeLeaderboardRow = {
+  rank?: number
   athleteId: string
   totalPoints: number
   eventsCount: number
@@ -13,6 +14,11 @@ type EdgeLeaderboardRow = {
   countrySportCode: string
   countryIso2: string
   countryFlagUrl: string | null
+}
+
+export type LeaderboardPageQuery = {
+  offset: number
+  limit: number
 }
 
 function windowToYears(window: string): number {
@@ -31,6 +37,7 @@ function windowToSeasonRange(window: string): { seasonStart: string | null; seas
 /** Leaderboard from `get_leaderboard` RPC + synthetic `Athlete` rows for the UI. */
 export async function fetchLeaderboardFromSupabase(
   filters: LeaderboardFilters,
+  page?: Partial<LeaderboardPageQuery>,
 ): Promise<{ rows: LeaderboardRow[]; athletes: Athlete[] }> {
   const client = getSupabaseBrowserClient()
   if (!client) {
@@ -38,6 +45,8 @@ export async function fetchLeaderboardFromSupabase(
   }
 
   const { seasonStart, seasonEnd } = windowToSeasonRange(filters.window)
+  const offset = Math.max(0, Math.trunc(page?.offset ?? 0))
+  const limit = Math.min(500, Math.max(1, Math.trunc(page?.limit ?? 100)))
 
   const { data: res, error } = await client.functions.invoke('public-leaderboard', {
     body: {
@@ -47,6 +56,8 @@ export async function fetchLeaderboardFromSupabase(
       licence: filters.licence,
       seasonStart,
       seasonEnd,
+      offset,
+      limit,
     },
   })
   if (error) throw new Error(error.message)
@@ -55,7 +66,7 @@ export async function fetchLeaderboardFromSupabase(
   const list = (res.data ?? []) as EdgeLeaderboardRow[]
 
   const rows: LeaderboardRow[] = list.map((r, i) => ({
-    rank: i + 1,
+    rank: Number.isFinite(Number(r.rank)) ? Number(r.rank) : offset + i + 1,
     athleteId: r.athleteId,
     totalPoints: Number(r.totalPoints),
     eventsCount: Number(r.eventsCount),
