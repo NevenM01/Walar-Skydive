@@ -412,3 +412,6 @@ verify_jwt = false
 
 [functions.public-upload-id-document]
 verify_jwt = false
+
+[functions.public-athlete-search]
+verify_jwt = false
