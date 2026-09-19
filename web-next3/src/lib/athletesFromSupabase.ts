@@ -73,9 +73,10 @@ export async function fetchAthleteByIdFromSupabase(id: string): Promise<Athlete 
     displayName: string
     countrySportCode: string
     gender: 'M' | 'F'
-    dateOfBirth: string | null
+    age: number | null
     faiLicence: string | null
-    dobDisplayMode: 'age' | 'date'
+    gdprPublishFullName?: boolean
+    gdprConsentGiven?: boolean
     rankingPoints: number
     competitionsCount: number
     bestRoundCm: number | null
@@ -93,11 +94,15 @@ export async function fetchAthleteByIdFromSupabase(id: string): Promise<Athlete 
     displayName: normalizeUnicodeForDisplay(a.displayName),
     countryCode: a.countrySportCode,
     gender: a.gender,
-    dateOfBirth: a.dateOfBirth,
+    dateOfBirth: null,
+    age: a.age ?? null,
     faiLicence: a.faiLicence,
-    dobDisplayMode: a.dobDisplayMode,
+    dobDisplayMode: 'age',
     rankingPoints: Number(a.rankingPoints),
-    gdprFlags: { publishFullName: true, consentGiven: true },
+    gdprFlags: {
+      publishFullName: Boolean(a.gdprPublishFullName),
+      consentGiven: a.gdprConsentGiven !== false,
+    },
     competitionsCount: Number(a.competitionsCount),
     bestRoundCm: a.bestRoundCm != null ? Number(a.bestRoundCm) : null,
     bio: a.bio ?? null,
@@ -128,12 +133,39 @@ export async function fetchLinkedProfileAthletesCountFromSupabase(): Promise<num
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }
+  const rpc = await sb.rpc('count_linked_athlete_profiles')
+  if (!rpc.error && rpc.data != null) {
+    const n = Number(rpc.data)
+    if (Number.isFinite(n)) return n
+  }
   const { error, count } = await sb
     .from('athletes')
     .select('id', { count: 'exact', head: true })
     .not('user_id', 'is', null)
   if (error) throw new Error(error.message)
   return count ?? 0
+}
+
+export type PublicAthleteSearchHit = { id: string; displayName: string; countryCode: string }
+
+export async function searchPublicAthletesFromSupabase(query: string): Promise<PublicAthleteSearchHit[]> {
+  const sb = getSupabaseAnonPublicClient()
+  if (!sb) {
+    throw new Error('Supabase is not configured.')
+  }
+  const q = query.trim()
+  if (q.length < 3) return []
+  const { data: res, error } = await sb.functions.invoke('public-athlete-search', {
+    body: { query: q, limit: 10 },
+  })
+  if (error) throw new Error(error.message)
+  if (res?.error) throw new Error(String(res.error))
+  const rows = (res?.data ?? []) as PublicAthleteSearchHit[]
+  return rows.map((r) => ({
+    id: r.id,
+    displayName: normalizeUnicodeForDisplay(r.displayName),
+    countryCode: r.countryCode,
+  }))
 }
 
 export type AthletesPageQuery = {
@@ -145,7 +177,7 @@ export type AthletesPageQuery = {
 export async function fetchAthletesPageFromSupabase(
   params: AthletesPageQuery,
 ): Promise<{ rows: Athlete[]; total: number }> {
-  const sb = getSupabaseAnonPublicClient()
+  const sb = getSupabaseBrowserClient()
   if (!sb) {
     throw new Error('Supabase is not configured.')
   }

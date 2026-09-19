@@ -76,7 +76,10 @@ Deno.serve(async (req) => {
       .select('id')
       .eq('id', athleteId)
       .maybeSingle()
-    if (aErr) return json({ error: aErr.message }, 500)
+    if (aErr) {
+      console.error('public-profile-edit-request athlete lookup', aErr.message)
+      return json({ error: 'Internal error' }, 500)
+    }
     if (!athlete) return json({ error: 'Athlete not found' }, 400)
   }
 
@@ -97,7 +100,10 @@ Deno.serve(async (req) => {
     .select('id, status, created_at')
     .single()
 
-  if (error) return json({ error: error.message }, 500)
+  if (error) {
+    console.error('public-profile-edit-request insert', error.message)
+    return json({ error: 'Internal error' }, 500)
+  }
   return json({ data })
 })
 

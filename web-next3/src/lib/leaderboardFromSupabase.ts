@@ -11,6 +11,9 @@ type EdgeLeaderboardRow = {
   displayName: string
   gender: string
   avatarUrl: string | null
+  faiLicence?: string | null
+  age?: number | null
+  gdprPublishFullName?: boolean
   countrySportCode: string
   countryIso2: string
   countryFlagUrl: string | null
@@ -78,7 +81,12 @@ export async function fetchLeaderboardFromSupabase(
     displayName: normalizeUnicodeForDisplay(r.displayName),
     countryCode: r.countrySportCode,
     rankingPoints: Number(r.totalPoints),
-    gdprFlags: { publishFullName: true, consentGiven: true },
+    age: r.age ?? null,
+    faiLicence: r.faiLicence ?? null,
+    gdprFlags: {
+      publishFullName: Boolean(r.gdprPublishFullName),
+      consentGiven: true,
+    },
     competitionsCount: Number(r.eventsCount),
     bestRoundCm: null,
     avatarUrl: r.avatarUrl?.trim() || undefined,

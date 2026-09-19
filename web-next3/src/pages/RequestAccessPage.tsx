@@ -9,7 +9,7 @@ import {
   authLabelClass,
   authPrimaryButtonClass,
 } from '../components/auth/AuthSplitShell'
-import { fetchAthletesPageFromSupabase } from '../lib/athletesFromSupabase'
+import { searchPublicAthletesFromSupabase } from '../lib/athletesFromSupabase'
 import { submitProfileEditRequest } from '../lib/profileEditRequestsFromSupabase'
 import { uploadIdDocumentToStorage } from '../lib/idDocumentUpload'
 
@@ -49,7 +49,7 @@ export default function RequestAccessPage() {
 
   useEffect(() => {
     const q = query.trim()
-    if (q.length < 2) {
+    if (q.length < 3) {
       setAthleteOptions([])
       return
     }
@@ -59,11 +59,9 @@ export default function RequestAccessPage() {
     const t = window.setTimeout(() => {
       void (async () => {
         try {
-          const { rows } = await fetchAthletesPageFromSupabase({ query: q, offset: 0, limit: 10 })
+          const rows = await searchPublicAthletesFromSupabase(q)
           if (cancelled) return
-          setAthleteOptions(
-            rows.map((a) => ({ id: a.id, displayName: a.displayName, countryCode: a.countryCode })),
-          )
+          setAthleteOptions(rows)
         } catch {
           if (!cancelled) setAthleteOptions([])
         } finally {
@@ -239,7 +237,7 @@ export default function RequestAccessPage() {
                   type="text"
                   disabled={submitting}
                   className="w-full rounded-[14px] border-0 bg-transparent py-3 pl-11 pr-3.5 text-sm text-[var(--text-col)] outline-none placeholder:text-[var(--muted)] disabled:opacity-55"
-                  placeholder="Type at least 2 characters…"
+                  placeholder="Type at least 3 characters…"
                   value={query}
                   onChange={(e) => {
                     setQuery(e.target.value)
@@ -275,7 +273,7 @@ export default function RequestAccessPage() {
                     </button>
                   ))}
                 </div>
-              ) : !selected && query.trim().length >= 2 ? (
+              ) : !selected && query.trim().length >= 3 ? (
                 <p className="mt-2 text-xs text-[var(--muted)]">No matches. Use manual details instead.</p>
               ) : null}
             </div>

@@ -106,6 +106,9 @@ export default function AthletePage() {
               <h1 className="font-display font-black text-3xl md:text-4xl tracking-tighter text-[var(--text-col)] leading-tight mb-1">
                 {athlete.displayName}
               </h1>
+              {athlete.age != null ? (
+                <p className="text-sm text-[var(--muted)]">{athlete.age} yrs</p>
+              ) : null}
               {athlete.faiLicence && (
                 <p className="text-sm text-[var(--muted)]">FAI {athlete.faiLicence}</p>
               )}

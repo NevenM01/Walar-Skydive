@@ -28,6 +28,8 @@ export type Athlete = {
   pendingAvatarPath?: string | null
   pendingAvatarUpdatedAt?: string | null
   rankingPoints: number
+  /** Public age in whole years. Date of birth is never sent on public payloads. */
+  age?: number | null
   gdprFlags: GdprFlags
   competitionsCount: number
   bestRoundCm: number | null
