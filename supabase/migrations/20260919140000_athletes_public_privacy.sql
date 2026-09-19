@@ -2,6 +2,8 @@
 -- Review this file before applying. Do not run from the agent against the live database.
 -- Apply last, after deploying edge functions (including public-athlete-search) and the frontend.
 
+begin;
+
 -- ---------------------------------------------------------------------------
 -- SELECT policies: own row + admin. Drop blanket public read.
 -- ---------------------------------------------------------------------------
@@ -12,7 +14,7 @@ create policy "athletes_select_own"
   on public.athletes
   for select
   to authenticated
-  using (auth.uid() = user_id);
+  using ((select auth.uid()) = user_id);
 
 drop policy if exists "athletes_select_admin" on public.athletes;
 create policy "athletes_select_admin"
@@ -81,8 +83,18 @@ comment on function public.count_linked_athlete_profiles() is
 revoke all on function public.count_linked_athlete_profiles() from public;
 grant execute on function public.count_linked_athlete_profiles() to anon, authenticated, service_role;
 
+-- Belt-and-suspenders: ensure merge/recalc helpers are not executable by anon.
+revoke execute on function public.merge_athletes_safe(uuid, uuid[], text) from anon;
+revoke execute on function public.merge_athletes_safe_clear_junk_dob(uuid, uuid[], text) from anon;
+revoke execute on function public.merge_athletes_safe_clear_loser_dob(uuid, uuid[], text) from anon;
+revoke execute on function public.auto_merge_athletes_name_dob(int) from anon;
+revoke execute on function public.auto_merge_athletes_name_core(int) from anon;
+revoke execute on function public.walar_recalculate_competition_result(uuid) from anon;
+
 -- Other PII tables (profiles, cookie_consents, athlete_profile_edit_requests,
 -- walar_partner_inquiries) are intentionally unchanged in this migration.
+
+commit;
 
 -- ---------------------------------------------------------------------------
 -- ROLLBACK (commented — do not run with the forward migration)
@@ -92,6 +104,13 @@ grant execute on function public.count_linked_athlete_profiles() to anon, authen
 -- grant execute on function public.get_leaderboard(text, uuid, int, text, date, date) to anon, authenticated;
 -- grant execute on function public.get_leaderboard(text, uuid, int, text, date, date, int, int) to anon, authenticated;
 -- grant execute on function public.get_athlete_public_ranking_summary(uuid, int) to anon, authenticated;
+--
+-- grant execute on function public.merge_athletes_safe(uuid, uuid[], text) to anon;
+-- grant execute on function public.merge_athletes_safe_clear_junk_dob(uuid, uuid[], text) to anon;
+-- grant execute on function public.merge_athletes_safe_clear_loser_dob(uuid, uuid[], text) to anon;
+-- grant execute on function public.auto_merge_athletes_name_dob(int) to anon;
+-- grant execute on function public.auto_merge_athletes_name_core(int) to anon;
+-- grant execute on function public.walar_recalculate_competition_result(uuid) to anon;
 --
 -- grant all on table public.athletes to anon;
 -- grant all on table public.athletes to authenticated;
