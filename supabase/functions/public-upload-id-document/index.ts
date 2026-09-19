@@ -32,7 +32,10 @@ Deno.serve(async (req) => {
     .from(BUCKET)
     .upload(storagePath, bytes, { contentType: file.type, upsert: false })
 
-  if (error) return json({ error: error.message }, 500)
+  if (error) {
+    console.error('public-upload-id-document', error.message)
+    return json({ error: 'Internal error' }, 500)
+  }
   return json({ data: { path: data.path } })
 })
 

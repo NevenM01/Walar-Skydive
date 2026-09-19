@@ -64,7 +64,10 @@ Deno.serve(async (req) => {
     .order('display_name', { ascending: true })
     .limit(RESULT_LIMIT)
 
-  if (error) return json({ error: error.message }, 500)
+  if (error) {
+    console.error('public-athlete-search', error.message)
+    return json({ error: 'Internal error' }, 500)
+  }
 
   const out = ((data ?? []) as Array<{
     id: string

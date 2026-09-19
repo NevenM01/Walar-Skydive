@@ -34,7 +34,10 @@ Deno.serve(async (req) => {
     .eq('id', body.athleteId)
     .maybeSingle()
 
-  if (aErr) return json({ error: aErr.message }, 500)
+  if (aErr) {
+    console.error('public-athlete select', aErr.message)
+    return json({ error: 'Internal error' }, 500)
+  }
   if (!athlete) return json({ data: null })
 
   if (!athlete.gdpr_consent_given) return json({ data: null })
@@ -43,7 +46,10 @@ Deno.serve(async (req) => {
     p_athlete_id: body.athleteId,
     p_window_years: windowYears,
   })
-  if (sErr) return json({ error: sErr.message }, 500)
+  if (sErr) {
+    console.error('public-athlete ranking summary', sErr.message)
+    return json({ error: 'Internal error' }, 500)
+  }
 
   const row = (Array.isArray(summary) ? summary[0] : null) as
     | { total_points: number | string; events_count: number | string; best_round_cm: number | null }
