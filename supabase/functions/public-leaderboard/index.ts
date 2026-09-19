@@ -87,7 +87,10 @@ Deno.serve(async (req) => {
     error = retry.error
   }
 
-  if (error) return json({ error: error.message }, 500)
+  if (error) {
+    console.error('public-leaderboard get_leaderboard', error.message)
+    return json({ error: 'Internal error' }, 500)
+  }
 
   const rows = (data ?? []) as Array<{
     rank: number | string
@@ -102,12 +105,17 @@ Deno.serve(async (req) => {
 
   const ids = [...new Set(rows.map((r) => r.athlete_id).filter(Boolean))]
   const privacyById = new Map<string, LeaderboardPrivacyRow>()
-  if (ids.length > 0) {
+  const PRIVACY_BATCH = 100
+  for (let i = 0; i < ids.length; i += PRIVACY_BATCH) {
+    const chunk = ids.slice(i, i + PRIVACY_BATCH)
     const { data: privacyRows, error: pErr } = await serviceClient
       .from('athletes')
       .select('id, gdpr_publish_full_name, avatar_url, fai_licence, date_of_birth')
-      .in('id', ids)
-    if (pErr) return json({ error: pErr.message }, 500)
+      .in('id', chunk)
+    if (pErr) {
+      console.error('public-leaderboard privacy lookup', pErr.message)
+      return json({ error: 'Internal error' }, 500)
+    }
     for (const row of (privacyRows ?? []) as LeaderboardPrivacyRow[]) {
       privacyById.set(row.id, row)
     }
